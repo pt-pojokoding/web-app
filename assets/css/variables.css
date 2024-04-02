@@ -1,0 +1,11 @@
+:root {
+    --navbar-height: 65px;
+}
+
+.navbar-height {
+    height: var(--navbar-height);
+}
+
+.h-screen-minus-navbar {
+    height: calc(100vh - var(--navbar-height));
+}
