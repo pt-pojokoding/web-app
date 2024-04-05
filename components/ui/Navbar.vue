@@ -5,7 +5,7 @@ const currentUser = authStore.user;
 </script>
 
 <template>
-    <nav class="w-full bg-white dark:bg-slate-950 border-b-2 navbar-height sticky top-0 z-10">
+    <nav class="w-full bg-white dark:bg-bg border-b-2 navbar-height sticky top-0 z-10">
         <div
             class="container mx-auto px-4 flex items-center justify-between h-16"
         >
