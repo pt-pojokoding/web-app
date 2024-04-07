@@ -30,6 +30,7 @@ const currentContent = contentStore.currentContent;
             <div class="w-full">
                 <ContentExercise v-if="currentContent.contentType == 'exercise'"></ContentExercise> 
                 <ContentArticle v-if="currentContent.contentType == 'post'"></ContentArticle> 
+                <Discussion></Discussion>
             </div>
         </div>
     </div>
