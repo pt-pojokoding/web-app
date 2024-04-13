@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-bg">
+    <div class="dark:bg-bg bg-white">
         <UiNavbar />
         <slot />
     </div>
