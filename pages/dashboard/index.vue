@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 const authStore = useAuthStore();
 authStore.checkUser();
 
@@ -42,7 +42,7 @@ const tabsItems = [
             <template #achievement="{ item }">
                 <UCard>
                     <h2 class="text-2xl font-bold">{{ item.title }}</h2>
-                    Fitur Achievement
+                    <AchievementDashboardList class="mt-3" />
                 </UCard>
             </template>
 

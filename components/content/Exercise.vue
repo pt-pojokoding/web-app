@@ -1,4 +1,5 @@
 <script setup>
+import checkExercise from "~/services/achievement/exercise";
 import { renderMarkdown } from "~/services/content/renderMarkdown.ts";
 const contentStore = useContentStore();
 const progressStore = useProgressStore();
@@ -50,6 +51,7 @@ async function handleExecuteCode() {
     isLoading.value = false;
 
     await progressStore.saveProgress(code.value);
+    await checkExercise()
 }
 </script>
 

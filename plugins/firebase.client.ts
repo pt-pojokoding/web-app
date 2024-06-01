@@ -4,7 +4,7 @@ import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import { getAnalytics } from "firebase/analytics";
 
-export default defineNuxtPlugin((nuxtApp) => {
+export default defineNuxtPlugin(() => {
     const config = {
         apiKey: "AIzaSyCTm_47x7wyg8qPrSYKNVXPls0W0Ppi8AI",
         authDomain: "pojokoding-startup.firebaseapp.com",
@@ -12,7 +12,7 @@ export default defineNuxtPlugin((nuxtApp) => {
         storageBucket: "pojokoding-startup.appspot.com",
         messagingSenderId: "437430484981",
         appId: "1:437430484981:web:310d6db7fc92364fa6aabc",
-        measurementId: "G-ZQHR60DELH"
+        measurementId: "G-ZQHR60DELH",
     };
 
     const app = initializeApp(config);
@@ -23,8 +23,16 @@ export default defineNuxtPlugin((nuxtApp) => {
 
     console.log("Firebase client initialized");
 
-    nuxtApp.provide("auth", auth);
-    nuxtApp.provide("db", db);
-    nuxtApp.provide("storage", storage);
-    nuxtApp.provide("analytics", analytics);
+    // nuxtApp.provide("auth", auth);
+    // nuxtApp.provide("db", db);
+    // nuxtApp.provide("storage", storage);
+    // nuxtApp.provide("analytics", analytics);
+    return {
+        provide: {
+            db,
+            auth,
+            storage,
+            analytics,
+        },
+    };
 });

@@ -1,4 +1,6 @@
-<script setup>
+<script setup lang="ts">
+import checkQuiz from '~/services/achievement/quiz';
+
 /**
  * FITUR QUIZ
  * - Saat pertama kali di render, komponen ini akan mengecek apakah quiz sudah diselesaikan atau belum
@@ -33,19 +35,20 @@
 const contentStore = useContentStore();
 const progressStore = useProgressStore();
 const authStore = useAuthStore();
+const { user } = storeToRefs(useAuthStore())
 
-const quiz = contentStore.currentContent.quiz;
+const quiz = (contentStore.currentContent as any).quiz;
 const currentContent = contentStore.currentContent;
 const currentContentProgress = contentStore.currentContentProgress;
 
 const quizStarted = ref(false);
-const currentQuestionIndex = ref(null);
+const currentQuestionIndex = ref<number | null>(null);
 const isSelectedAnswerCorrect = ref(null);
 const isAnswerToAQuestionSubmited = ref(false);
 const isAnswerSelected = ref(false);
 const userAnswerIsCorrect = ref(false);
 
-const selectedChoiceIndex = ref(null);
+const selectedChoiceIndex = ref<number | null>(null);
 const selectedChoiceExplanation = ref(null);
 const showExplanation = ref(false);
 
@@ -57,7 +60,7 @@ function startQuiz() {
 function checkAnswer() {
     showExplanation.value = true;
     selectedChoiceExplanation.value =
-        quiz[currentQuestionIndex.value].choices[selectedChoiceIndex.value].explanation;
+        quiz[currentQuestionIndex.value!].choices[selectedChoiceIndex.value!].explanation;
 
     console.log("selectedChoiceExplanation", selectedChoiceExplanation.value);
 
@@ -71,15 +74,19 @@ function checkAnswer() {
 }
 
 async function nextQuestion() {
-    currentQuestionIndex.value++;
+    currentQuestionIndex.value!++;
     isSelectedAnswerCorrect.value = null;
     showExplanation.value = false;
     userAnswerIsCorrect.value = false;
     if (currentQuestionIndex.value === quiz.length) {
         console.log("quiz selesai, menjalankan save progress");
         await progressStore.saveProgress();
+        // kodenya disini
+        // check quiz
+        await checkQuiz();
     }
 }
+
 </script>
 
 <template>
