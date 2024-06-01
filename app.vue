@@ -1,6 +1,13 @@
-<script setup>
+<script setup lang="ts">
+import { useMyAchievementStore } from '~/stores/achievement';
+import { fetchAchievement } from './services/achievement/quiz';
+
 const authStore = useAuthStore();
 const isLoading = computed(() => authStore.isLoading);
+
+onMounted(async () => {
+    await fetchAchievement();
+});
 </script>
 
 <template>
