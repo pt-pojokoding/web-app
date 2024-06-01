@@ -31,6 +31,7 @@
   },
   "devDependencies": {
     "@nuxtjs/tailwindcss": "^6.11.4",
-    "nuxt-icon": "^0.6.9"
+    "nuxt-icon": "^0.6.9",
+    "shiki": "^1.6.0"
   }
 }
