@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 const authStore = useAuthStore();
 const isLoading = computed(() => authStore.isLoading);
 </script>
@@ -11,6 +11,7 @@ const isLoading = computed(() => authStore.isLoading);
             <NuxtPage></NuxtPage>
         </NuxtLayout>
         <UNotifications />
+        <script src="//cdn.loop11.com/embed.js" type="text/javascript" async="async"></script>
     </div>
 </template>
 

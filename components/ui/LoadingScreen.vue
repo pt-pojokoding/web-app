@@ -1,6 +1,9 @@
 <template>
     <div class="loading-screen">
-        <span class="text-2xl"> Loading... </span>
+        <div class="flex flex-col items-center justify-center">
+            <img src="@/assets/branding/Pojokoding-wordmark.svg" class="mb-4">
+            <UiOrbitLoading></UiOrbitLoading>
+        </div>
     </div>
 </template>
 

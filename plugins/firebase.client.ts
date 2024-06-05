@@ -23,8 +23,19 @@ export default defineNuxtPlugin((nuxtApp) => {
 
     console.log("Firebase client initialized");
 
-    nuxtApp.provide("auth", auth);
-    nuxtApp.provide("db", db);
-    nuxtApp.provide("storage", storage);
-    nuxtApp.provide("analytics", analytics);
+    // nuxtApp.provide("auth", auth);
+    // nuxtApp.provide("db", db);
+    // nuxtApp.provide("storage", storage);
+    // nuxtApp.provide("analytics", analytics);
+
+    auth.languageCode = "id";
+
+    return {
+        provide: {
+            db,
+            auth,
+            storage,
+            analytics,
+        },
+    };
 });

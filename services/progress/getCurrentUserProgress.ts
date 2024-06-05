@@ -9,7 +9,6 @@ import { query, collection, where, getDocs, orderBy } from "firebase/firestore";
 export const getCurrentUserProgress = async (userId: string, courseId: string) => {
     const { $db } = useNuxtApp()
 
-    // @ts-ignore
     const progressRef = collection($db, "progress")
     const q = query(
       progressRef, 

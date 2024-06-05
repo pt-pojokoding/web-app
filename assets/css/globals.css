@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+    font-family: "space-mono";
+    src: url("@/public/fonts/SpaceMono-Regular.ttf");
+}
+
+.navbar-height {
+    height: var(--navbar-height);
+}
+
+.h-screen-minus-navbar {
+    height: calc(100vh - var(--navbar-height));
+}
+
+/* Global scrollbar styles */
+::-webkit-scrollbar {
+    width: 14px;
+    height: 14px;
+    background: #f1f1f1; /* Background of the track */
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888; /* Color of the scrollbar thumb */
+    border-radius: 6px; /* Rounded corners for the thumb */
+    border: 3px solid #f1f1f1; /* Border to match the track background */
+}

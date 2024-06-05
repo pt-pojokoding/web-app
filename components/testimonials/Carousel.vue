@@ -26,7 +26,7 @@
 <template>
   <!-- TODO: loop, button bug, Bikin sendiri -->
   <UCarousel
-    v-slot="{ item, index }"
+    v-slot="{ item }"
     :items="items2"
     :ui="{
       item: 'basis-full flex flex-col w-full h-fit text-white justify-center items-center',

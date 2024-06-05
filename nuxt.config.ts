@@ -8,11 +8,22 @@ const allFilesInsideFolder = (path: string) => {
 
 export default defineNuxtConfig({
     devtools: { enabled: false },
+    // app: {
+    //     head: {
+    //         script: [
+    //             {
+    //                 src: "//cdn.loop11.com/embed.js",
+    //                 type: "text/javascript",
+    //                 async: true,
+    //             },
+    //         ],
+    //     },
+    // },
 
     modules: ["@pinia/nuxt", "@nuxtjs/sanity", "@nuxt/ui"],
 
     css: allFilesInsideFolder("assets/css/"),
-    
+
     tailwindcss: {
         cssPath: "~/assets/css/tailwind.css",
         configPath: "tailwind.config",
