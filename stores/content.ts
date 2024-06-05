@@ -7,11 +7,17 @@ import { getSidebarData } from "~/services/content/sidebar";
 export const useContentStore = defineStore("content", () => {
     const progressStore = useProgressStore();
 
-    const courseCatalog = ref([]);
-    const currentContent = ref(null);
-    const currentContentProgress = ref(null);
-    const sidebar = ref([]);
+    const courseCatalog = ref<any>([]);
+    const currentContent = ref<any>(null);
+    const sidebar = ref<any>([]);
     const currentCourseSlug = ref<string>("");
+
+    function isCurrentContentFinished() {
+        if(!progressStore.currentUserProgress) return false;
+        return progressStore.currentUserProgress.some(
+            (progress) => progress.contentId === currentContent.value._id
+        );
+    }
 
     async function getCourses() {
         if(courseCatalog.value.length <= 0) {
@@ -32,6 +38,7 @@ export const useContentStore = defineStore("content", () => {
 
     async function getSidebar(courseSlug: string) {
         if (!(courseSlug === currentCourseSlug.value) && sidebar.value.length <= 0) {
+            console.log(courseSlug)
             currentCourseSlug.value = courseSlug;
             const sidebarData = await getSidebarData(courseSlug);
             sidebar.value = sidebarData;
@@ -39,17 +46,15 @@ export const useContentStore = defineStore("content", () => {
     }
 
     async function populateSidebarWithUserProgress() {
-        const userProgress = progressStore.currentUserProgress;
-        console.log("userProgress", userProgress);
-
         /**
          * Cari konten pada sidebar yang terdapat pada currentUserProgress
          * jika konten tersebut ada di kedua tempat, maka tambah properti isContentFinished = true
+         * isContentFinished digunakan untuk menampilkan tanda centang pada item tersebut
          */
-        if (userProgress) {
+        if (progressStore.currentUserProgress) {
             for (const section of sidebar.value) {
                 for (const content of section.contents) {
-                    if (userProgress.some((progress) => progress.contentId === content._id)) {
+                    if (progressStore.currentUserProgress.some((progress) => progress.contentId === content._id)) {
                         content.isContentCompleted = true;
                     }
                 }
@@ -60,8 +65,8 @@ export const useContentStore = defineStore("content", () => {
     return {
         courseCatalog,
         currentContent,
-        currentContentProgress,
         sidebar,
+        isCurrentContentFinished,
         getCourses,
         getCourse,
         getContent,

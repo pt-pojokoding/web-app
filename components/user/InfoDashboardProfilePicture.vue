@@ -67,33 +67,42 @@ async function uploadImage() {
             title: "Berhasil",
             description: "Foto profil berhasil diubah",
             variant: "success",
-        })
+        });
     }
 }
 </script>
 
 <template>
     <div>
-        <div class="w-60 h-60 rounded-full">
-            <img :src="currentUser.photoURL" alt="Profile Pic" />
+        <div class="w-60 h-60 relative">
+            <UAvatar
+                :src="currentUser.photoURL"
+                alt="Profile Pic"
+                size="dashboard"
+                :ui="{
+                    size: {
+                        dashboard: 'h-52 w-52 text-2xl',
+                    },
+                }"
+            />
+            <UDropdown :items="dropdownItems" class="absolute right-6 bottom-6">
+                <UButton variant="ghost" icon="i-heroicons-pencil"></UButton>
+    
+                <template #upload>
+                    <div class="relative">
+                        <UButton>Unggah Foto</UButton>
+                        <input
+                            ref="input"
+                            type="file"
+                            name="image"
+                            accept="image/*"
+                            @change="setImage"
+                            class="absolute left-0 top-0 w-full h-full opacity-0 cursor-pointer"
+                        />
+                    </div>
+                </template>
+            </UDropdown>
         </div>
-        <UDropdown :items="dropdownItems">
-            <UButton variant="ghost" icon="i-heroicons-pencil"></UButton>
-
-            <template #upload>
-                <div class="relative">
-                    <UButton>Unggah Foto</UButton>
-                    <input
-                        ref="input"
-                        type="file"
-                        name="image"
-                        accept="image/*"
-                        @change="setImage"
-                        class="absolute left-0 top-0 w-full h-full opacity-0 cursor-pointer"
-                    />
-                </div>
-            </template>
-        </UDropdown>
         <UModal v-model="isModalOpen">
             <div class="p-4">
                 <cropper

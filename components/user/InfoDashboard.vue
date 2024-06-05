@@ -13,18 +13,19 @@ async function handleEditUserProfile(){
 </script>
 
 <template>
-    <div class="flex gap-4">
+    <div class="flex gap-4 w-full">
         <div>
             <UserInfoDashboardProfilePicture></UserInfoDashboardProfilePicture>
         </div>
-        <div class="flex flex-col w-full">
+        <div class="flex flex-col w-full gap-6 relative">
+            <div class="absolute inset-0 z-10"></div>
             <UFormGroup label="Email" disabled>
-                <UInput v-model="email" placeholder="you@example.com" icon="i-heroicons-envelope" />
+                <UInput v-model="email" size="xl" placeholder="you@example.com" icon="i-heroicons-envelope" />
             </UFormGroup>
             <UFormGroup label="Nama">
-                <UInput v-model="name" icon="i-heroicons-user" />
+                <UInput v-model="name" size="xl" icon="i-heroicons-user" />
             </UFormGroup>
-            <UButton @click="handleEditUserProfile">Simpan</UButton>
+            <!-- <UButton @click="handleEditUserProfile">Simpan</UButton> -->
         </div>
     </div>
 </template> 

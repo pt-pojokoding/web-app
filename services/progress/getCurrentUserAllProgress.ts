@@ -11,12 +11,12 @@ export const getCurrentUserAllProgress = async (userId: string) => {
     const progress = querySnapshot.docs.map((doc) => doc.data());
     console.log("Progress for this user: ", progress);
 
-    // extract courseId yang muncul, ambil satu kali, jika course id sudah ada, maka tidak perlu diambil lagi
+    // Dari semua progress yang didapat, ambil semua courseId yang muncul, dan masukan kedalam array
     const courseIdList = progress.map((item) => item.courseId);
     const uniqueCourseIdList = [...new Set(courseIdList)];
     console.log("Unique course id list: ", uniqueCourseIdList);
 
-    // fetch data semua course dari sanity yang muncul di progress yang dimiliki user
+    // fetch data semua course menggunakan array courseId dari langkah sebelumnya 
     let courseData = [];
     for (const courseId of uniqueCourseIdList) {
         const courseQuery = groq`*[_type == "course" && _id == "${courseId}"][0]{

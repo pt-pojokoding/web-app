@@ -1,11 +1,10 @@
 <script setup>
 const authStore = useAuthStore();
-const currentUser = authStore.user;
 
 const items = [
     [
         {
-            label: authStore.user?.email,
+            label: authStore.user?.displayName || authStore.user?.email,
             slot: "account",
             disabled: true,
         },
@@ -21,19 +20,21 @@ const items = [
         {
             label: "Akun",
             icon: "i-heroicons-user",
-            to: "/dashboard/akun",
+            to: "/dashboard/info-akun",
         }
     ]
 ];
+
+console.log(authStore.user.photoURL);
 </script>
 
 <template>
     <UDropdown
         :items="items"
-        :ui="{ item: { disabled: 'cursor-text select-text' } }"
+        :ui="{ item: { disabled: 'cursor-text select-text' }, padding: 'p-1', width: 'min-w-60' }"
         :popper="{ placement: 'bottom-start' }"
     >
-        <UAvatar :src="currentUser.photoURL" />
+        <UAvatar :src="authStore.user.photoURL" />
 
         <template #account="{ item }">
             <div class="text-left">
