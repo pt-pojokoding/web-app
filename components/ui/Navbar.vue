@@ -9,7 +9,7 @@ const authStore = useAuthStore();
             <div class="flex items-center gap-6">
                 <NuxtLink to="/">
                     <img
-                        src="~/assets/branding/pojokoding-wordmark.svg"
+                        src="~/assets/branding/Pojokoding-wordmark.svg"
                         alt="Logo"
                         class="logo h-8"
                     />
