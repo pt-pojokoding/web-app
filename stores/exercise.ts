@@ -25,7 +25,7 @@ export const useExerciseStore = defineStore("exercise", () => {
         codeResult.value = result;
 
         contentStore.testCases.forEach((test: any, index: any) => {
-            if(result[index].stdout){
+            if (result[index].stdout) {
                 if ((result[index].stdout?.trim() ?? "") === test.expectedOutput) {
                     test.status = "success";
                     test.obtainedOutput = result[index].stdout;
@@ -35,12 +35,17 @@ export const useExerciseStore = defineStore("exercise", () => {
                 }
             }
 
-            if(result[index].stderr){
+            if (result[index].stderr) {
                 test.status = "failed";
                 test.obtainedOutput = result[index].stderr;
             }
 
-            if(result[index].stdout === null){
+            if (
+                result[index].status === "success" &&
+                result[index].stdout === null &&
+                result[index].stderr === null &&
+                result[index].exeption === null
+            ) {
                 test.status = "failed";
                 test.obtainedOutput = "Kode tidak menghasilkan output";
             }
@@ -60,19 +65,17 @@ export const useExerciseStore = defineStore("exercise", () => {
     }
 
     async function execCode(params: { stdinArray: any[]; code: string }) {
-        const readyToCompileCode = params.code + "\n\n" + contentStore.currentContent.compileCode;
+        const readyToCompileCode = params.code + "\n\n" + (contentStore.currentContent.compileCode ?? "");
+        console.log(readyToCompileCode);
 
-        const response = await runCode(
-            readyToCompileCode,
-            params.stdinArray,
-            contentStore.currentContent.languageConfig.languageName
-        );
+        const response = await runCode(readyToCompileCode, params.stdinArray, contentStore.currentContent.languageConfig.languageName);
 
+        console.log(response);
         return response;
     }
 
-    async function checkIfUserEligibleToAccessExercise(){
-        if(contentStore.currentContent.contentType === "exercise"){
+    async function checkIfUserEligibleToAccessExercise() {
+        if (contentStore.currentContent.contentType === "exercise") {
             if (!authStore.user) {
                 router.push("/");
             }
