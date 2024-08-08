@@ -1,4 +1,4 @@
-class Exercise {
+export class Exercise {
     getExercise() {
         return cy.get('[data-cy="exercise"]');
     }
@@ -37,7 +37,7 @@ class Exercise {
 
     getExerciseTestCasesContent() {
         return cy.get('[data-cy="exercise-test-cases-wrapper"]');
-    }
+    }    
 
     getExerciseStickyBottom() {
         return cy.get('[data-cy="exercise-sticky-bottom"]');

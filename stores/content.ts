@@ -1,26 +1,47 @@
-// @ts-nocheck
 import { getAllCourses } from "~/services/content/courses";
 import { getOneCourse } from "~/services/content/course";
 import { getContentData } from "~/services/content/content";
 import { getSidebarData } from "~/services/content/sidebar";
+import { renderMarkdown } from "~/services/content/renderMarkdown";
 
 export const useContentStore = defineStore("content", () => {
     const progressStore = useProgressStore();
+    const exerciseStore = useExerciseStore();
 
     const courseCatalog = ref<any>([]);
     const currentContent = ref<any>(null);
     const sidebar = ref<any>([]);
     const currentCourseSlug = ref<string>("");
 
+    const code = ref(currentContent.value?.startingCode);
+    const renderedPrompt = ref(renderMarkdown(currentContent.value?.prompt ?? ""));
+    const testCases = ref(currentContent.value?.testCases?.map((test: any) => {
+        return {
+            ...test,
+            testDesc: renderMarkdown(test.testDesc),
+            defaultOpen: false,
+        };
+    }) ?? []);
+
+    watch(currentContent, (newContent) => {
+        code.value = newContent?.startingCode ?? "";
+        renderedPrompt.value = renderMarkdown(newContent?.prompt ?? "");
+        testCases.value = newContent?.testCases?.map((test: any) => {
+            return {
+                ...test,
+                testDesc: renderMarkdown(test.testDesc),
+                defaultOpen: false,
+            };
+        }) ?? [];
+    });
+
     function isCurrentContentFinished() {
-        if(!progressStore.currentUserProgress) return false;
-        return progressStore.currentUserProgress.some(
-            (progress) => progress.contentId === currentContent.value._id
-        );
+        if (!progressStore.currentUserProgress) return false;
+        return progressStore.currentUserProgress.some((progress: any) => progress.contentId === currentContent.value._id);
     }
 
     async function getCourses() {
-        if(courseCatalog.value.length <= 0) {
+        if (courseCatalog.value.length <= 0) {
             courseCatalog.value = await getAllCourses();
         }
     }
@@ -31,14 +52,12 @@ export const useContentStore = defineStore("content", () => {
     }
 
     async function getContent(contentSlug: string, courseSlug: string) {
-        console.log("getting  content");
         const content = await getContentData(contentSlug, courseSlug);
         currentContent.value = content;
     }
 
     async function getSidebar(courseSlug: string) {
-        if (!(courseSlug === currentCourseSlug.value) && sidebar.value.length <= 0) {
-            console.log(courseSlug)
+        if (!(courseSlug === currentCourseSlug.value)) {
             currentCourseSlug.value = courseSlug;
             const sidebarData = await getSidebarData(courseSlug);
             sidebar.value = sidebarData;
@@ -46,15 +65,10 @@ export const useContentStore = defineStore("content", () => {
     }
 
     async function populateSidebarWithUserProgress() {
-        /**
-         * Cari konten pada sidebar yang terdapat pada currentUserProgress
-         * jika konten tersebut ada di kedua tempat, maka tambah properti isContentFinished = true
-         * isContentFinished digunakan untuk menampilkan tanda centang pada item tersebut
-         */
         if (progressStore.currentUserProgress) {
             for (const section of sidebar.value) {
                 for (const content of section.contents) {
-                    if (progressStore.currentUserProgress.some((progress) => progress.contentId === content._id)) {
+                    if (progressStore.currentUserProgress.some((progress: any) => progress.contentId === content._id)) {
                         content.isContentCompleted = true;
                     }
                 }
@@ -66,6 +80,9 @@ export const useContentStore = defineStore("content", () => {
         courseCatalog,
         currentContent,
         sidebar,
+        code,
+        renderedPrompt,
+        testCases,
         isCurrentContentFinished,
         getCourses,
         getCourse,

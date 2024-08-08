@@ -14,7 +14,7 @@ export const runCode = async (compilableCode: string, compiledStdin: any[], lang
             stdin: compiledStdin,
             files: [
                 {
-                    name: "index.py",
+                    name: "index.js",
                     content: compilableCode,
                 },
             ],

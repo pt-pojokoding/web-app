@@ -1,4 +1,4 @@
-class ArticleMarkdown {
+export class ArticleMarkdown {
     getArticleMarkdown() {
         return cy.get('[data-cy="article-markdown"]');
     }

@@ -10,7 +10,7 @@ export const useProgressStore = defineStore("progress", () => {
 
     const currentUserProgress = ref<any>(null);
     const currentUserProgressDashboard = ref<any>(null);
-    const currentContentProgress = ref<any>(null);
+    const currentContentProgress = ref<boolean>(null);
 
     function getCurrentContentProgress(currentContentId: string){
         return currentUserProgress.value?.find((progress) => progress.contentId === currentContentId);

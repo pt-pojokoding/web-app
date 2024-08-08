@@ -1,4 +1,4 @@
-class Quiz {
+export class Quiz {
     getQuiz() {
         return cy.get('[data-cy="quiz"]');
     }
@@ -27,6 +27,10 @@ class Quiz {
         return cy.get('[data-cy="quiz-intro-question-count"]');
     }
 
+    getQuizIntroQuestionCountNumber() {
+        return cy.get('[data-cy="quiz-intro-question-count-number"]');
+    }
+
     getQuizIntroStartButton() {
         return cy.get('[data-cy="quiz-intro-start-button"]');
     }
@@ -47,8 +51,20 @@ class Quiz {
         return cy.get('[data-cy="quiz-current-question-choices"]');
     }
 
-    getQuizCurrentQuestionExplanation() {
-        return cy.get('[data-cy="quiz-current-question-explanation"]');
+    getQuizCurrentQuestionLikeChoice(){
+        return cy.get('[data-cy^="quiz-current-question-choice-"]');
+    }
+
+    getQuizCurrentQuestionChoice(choiceIndex: number) {
+        return cy.get(`[data-cy="quiz-current-question-choice-${choiceIndex}"]`);
+    }
+
+    getQuizCurrentQuestionCorrectExplanation() {
+        return cy.get('[data-cy="quiz-current-question-correct-explanation"]');
+    }
+
+    getQuizCurrentQuestionWrongExplanation() {
+        return cy.get('[data-cy="quiz-current-question-wrong-explanation"]');
     }
 
     getQuizCheckAnswerButton() {
