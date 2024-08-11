@@ -20,8 +20,8 @@ const dropdownNotAuthenticatedItems = [
 </script>
 
 <template>
-    <nav class="w-full bg-white dark:bg-bg border-b-2 border-slate-600 navbar-height sticky top-0 z-10">
-        <div class="container mx-auto px-4 flex items-center justify-between h-16">
+    <nav class="w-full bg-white dark:bg-bg border-b-2 dark:border-slate-600 border-slate-400 navbar-height sticky top-0 z-10">
+        <div class="px-6 mx-auto flex items-center justify-between h-16">
             <div class="flex items-center gap-6">
                 <NuxtLink to="/" data-cy="navbar-logo">
                     <img src="~/assets/branding/Pojokoding-wordmark.svg" alt="Logo" class="logo h-8" />

@@ -5,6 +5,10 @@ const authStore = useAuthStore();
 // TODO: Test this
 authStore.checkUser({ redirectTo: '/login' });
 
+useSeoMeta({
+    title: 'Dashboard',
+    ogTitle: 'Dashboard',
+})
 </script>
 
 <template>

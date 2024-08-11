@@ -35,12 +35,13 @@ onMounted(async () => {
 .article {
     @apply py-4;
 }
+
 .article h1,
 .article h2 {
     @apply mt-5 mb-2;
 }
 .article p {
-    @apply my-2 text-justify;
+    @apply my-5 text-justify;
 }
 
 .article table {

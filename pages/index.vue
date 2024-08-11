@@ -14,6 +14,11 @@ function handleScrollToCoursesList() {
         behavior: 'smooth'
     });
 }
+
+useSeoMeta({
+    title: 'Pojokoding',
+    ogTitle: 'Pojokoding'
+})
 </script>
 
 <template>

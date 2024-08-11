@@ -4,6 +4,11 @@ const contentStore = useContentStore();
 const progressStore = useProgressStore();
 
 await contentStore.getContent(route.params.content, route.params.course);
+
+useSeoMeta({
+    title: contentStore.currentContent.displayTitle,
+    ogTitle: contentStore.currentContent.displayTitle,
+})
 </script>
 
 <template>

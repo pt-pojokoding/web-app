@@ -37,22 +37,23 @@ describe("Exercise logged in", () => {
 
     const correctCode = `function greet(name){
 	    console.log("Halo", name)
-   `;
+    }`;
 
     const partialyCorrectCode = `function greet(name){
         console.log("Halo Joni")
-    `;
+    }`;
 
     const wrongCode = `function greet(name){
         console.log("kopi sesat")
-    `;
+    }`;
 
     const wrongSyntaxCode = `function greet(name){
         console.log(", name)
-    `;
+    }`;
 
     it("Partialy Correct Answer", () => {
-        exerciseTextEditor.getExerciseCodeEditor().click().type("{ctrl}a").type("{del}").type(partialyCorrectCode);
+        cy.get('[role="textbox"]')
+        .invoke('text', partialyCorrectCode)
 
         exercise.getExerciseCheckAnswerButton().click();
 
@@ -74,7 +75,8 @@ describe("Exercise logged in", () => {
     });
 
     it("Wrong Answer no Syntax Error", () => {
-        exerciseTextEditor.getExerciseCodeEditor().click().type("{ctrl}a").type("{del}").type(wrongCode);
+        cy.get('[role="textbox"]')
+        .invoke('text', wrongCode)
 
         exercise.getExerciseCheckAnswerButton().click();
 
@@ -92,7 +94,8 @@ describe("Exercise logged in", () => {
     });
 
     it("Wrong Answer with Syntax Error", () => {
-        exerciseTextEditor.getExerciseCodeEditor().click().type("{ctrl}a").type("{del}").type(wrongSyntaxCode);
+        cy.get('[role="textbox"]')
+        .invoke('text', wrongSyntaxCode)
 
         exercise.getExerciseCheckAnswerButton().click();
 
@@ -110,7 +113,8 @@ describe("Exercise logged in", () => {
     });
 
     it("Correct Answer", () => {
-        exerciseTextEditor.getExerciseCodeEditor().click().type("{ctrl}a").type("{del}").type(correctCode);
+        cy.get('[role="textbox"]')
+        .invoke('text', correctCode)
 
         exercise.getExerciseCheckAnswerButton().click();
 

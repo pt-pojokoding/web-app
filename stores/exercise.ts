@@ -42,9 +42,9 @@ export const useExerciseStore = defineStore("exercise", () => {
 
             if (
                 result[index].status === "success" &&
-                result[index].stdout === null &&
-                result[index].stderr === null &&
-                result[index].exeption === null
+                !result[index].stdout &&
+                !result[index].stderr &&
+                !result[index].exeption
             ) {
                 test.status = "failed";
                 test.obtainedOutput = "Kode tidak menghasilkan output";
