@@ -76,6 +76,16 @@ export const useContentStore = defineStore("content", () => {
         }
     }
 
+    function resetCode() {
+        if (currentContent.value) {
+            code.value = currentContent.value.startingCode;
+            console.log("reset code");
+            console.log("Starting code", currentContent.value.startingCode);
+        } else {
+            console.log("No current content to reset code from");
+        }
+    }
+
     return {
         courseCatalog,
         currentContent,
@@ -89,5 +99,6 @@ export const useContentStore = defineStore("content", () => {
         getContent,
         getSidebar,
         populateSidebarWithUserProgress,
+        resetCode
     };
 });

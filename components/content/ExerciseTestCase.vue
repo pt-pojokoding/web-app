@@ -1,4 +1,6 @@
 <script setup>
+import { renderMarkdown } from "~/services/content/renderMarkdown";
+
 const exerciseStore = useExerciseStore();
 const contentStore = useContentStore();
 </script>
@@ -19,8 +21,7 @@ const contentStore = useContentStore();
                 data-cy="exercise-test-case-button"
             >
                 <div class="flex items-center gap-2" data-cy="exercise-test-case-button-content">
-                    <h2 class="text-lg text-start text-black dark:text-white" data-cy="exercise-test-case-title">
-                        {{ item.testTitle }}
+                    <h2 v-html="renderMarkdown(item.testTitle)" class="markdown-style text-lg text-start text-black dark:text-white" data-cy="exercise-test-case-title">
                     </h2>
                 </div>
                 <div class="flex items-center gap-2" data-cy="exercise-test-case-status-icons">
@@ -49,22 +50,20 @@ const contentStore = useContentStore();
 
         <template #item="{ item }">
             <div class="p-2 border-2 dark:border-gray-700 border-gray-200 rounded flex flex-col gap-4" data-cy="exercise-test-case-detail">
-                <div>
-                    <div class="text-base dark:text-white text-black" v-html="item.testDesc" data-cy="exercise-test-case-detail-description"></div>
+                <div v-if="item.testDesc">
+                    <div class="markdown-style exercise-style text-base dark:text-white text-black" v-html="item.testDesc" data-cy="exercise-test-case-detail-description"></div>
                 </div>
-                <div>
+                <div v-if="item.functionCallExample">
                     <h3 class="text-base font-bold dark:text-gray-300 text-gray-700" data-cy="exercise-test-case-detail-input-title">Input</h3>
-                    <p class="text-base dark:text-white text-black" data-cy="exercise-test-case-detail-input-content">
-                        {{ item.functionCallExample }}
-                    </p>
+                    <div v-html="renderMarkdown(item.functionCallExample)" class="markdown-style text-base dark:text-white text-black" data-cy="exercise-test-case-detail-input-content">
+                    </div>
                 </div>
-                <div>
+                <div v-if="item.expectedOutput">
                     <h3 class="text-base font-bold dark:text-gray-300 text-gray-700" data-cy="exercise-test-case-detail-expected-output-title">
                         Output yang diharapkan
                     </h3>
-                    <p class="text-base dark:text-white text-black" data-cy="exercise-test-case-detail-expected-output-content">
-                        {{ item.expectedOutput }}
-                    </p>
+                    <div v-html="renderMarkdown(item.expectedOutput)" class="markdown-style text-base dark:text-white text-black" data-cy="exercise-test-case-detail-expected-output-content">
+                    </div>
                 </div>
                 <div v-if="item.obtainedOutput">
                     <h3 class="text-base font-bold dark:text-gray-300 text-gray-700" data-cy="exercise-test-case-detail-obtained-output-title">

@@ -38,7 +38,7 @@ onBeforeUnmount(() => {
                 <!-- $ Question -->
                 <div data-cy="exercise-question">
                     <h2 class="text-xl font-bold mb-2" data-cy="exercise-question-title">Soal</h2>
-                    <div v-html="contentStore.renderedPrompt" data-cy="exercise-question-content"></div>
+                    <div v-html="contentStore.renderedPrompt" class="markdown-style exercise-style" data-cy="exercise-question-content"></div>
                 </div>
 
                 <!-- $ Test Cases -->
@@ -51,8 +51,13 @@ onBeforeUnmount(() => {
             </div>
 
             <!-- $ Sticky bottom div -->
-            <div class="flex justify-between p-2 border-t-2 border-slate-600 sticky bottom-0 w-full bg-white dark:bg-bg" data-cy="exercise-sticky-bottom">
-                <div></div>
+            <div
+                class="flex justify-between p-2 border-t-2 border-slate-600 sticky bottom-0 w-full bg-white dark:bg-bg"
+                data-cy="exercise-sticky-bottom"
+            >
+                <UButton variant="ghost" color="gray" @click="contentStore.resetCode()" data-cy="exercise-instruction-button">
+                    <UIcon name="i-heroicons-arrow-path"></UIcon>
+                </UButton>
                 <UButton
                     class="self-end"
                     size="xl"

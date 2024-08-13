@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.toc-container {
+    @apply dark:bg-slate-800 border shadow-sm p-4 my-4 rounded;
+}
+
+.toc-link {
+    @apply hover:text-primary text-lg;
+}
+
+.post-style {
+    @apply py-4;
+}
+
+.post-style p {
+    @apply my-5 text-justify;
+}
+
+.exercise-style p {
+    @apply my-2;
+}
+
+.markdown-style h1,
+.markdown-style h2 {
+    @apply mt-5 mb-2;
+}
+
+.markdown-style table {
+    @apply w-full;
+}
+
+.markdown-style table td,
+.markdown-style table th {
+    @apply table-fixed border-solid border p-3;
+}
+
+.markdown-style ul {
+    @apply list-disc list-inside;
+}
+
+.markdown-style ol {
+    @apply list-decimal list-inside;
+}
+
+.markdown-style h1 {
+    @apply text-3xl font-bold;
+}
+
+.markdown-style h2 {
+    @apply text-2xl font-bold;
+}
+
+.markdown-style h3 {
+    @apply text-xl font-bold;
+}
+
+.markdown-style code:not(pre code) {
+    @apply bg-slate-700/60 text-primary px-1 rounded;
+}
+
+.markdown-style strong {
+    @apply font-bold text-primary;
+} 

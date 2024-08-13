@@ -1,9 +1,21 @@
 <script setup>
+import { codeToHtml } from "shiki";
+
 const route = useRoute();
 const contentStore = useContentStore();
 const progressStore = useProgressStore();
 
 await contentStore.getContent(route.params.content, route.params.course);
+
+onMounted(async () => {
+    const code = document.querySelector("code.language-js");
+    if (code) {
+        code.innerHTML = await codeToHtml(code.innerHTML, {
+            theme: "tokyo-night",
+            lang: "javascript",
+        });
+    }
+});
 
 useSeoMeta({
     title: contentStore.currentContent.displayTitle,
