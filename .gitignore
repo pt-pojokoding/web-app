@@ -22,3 +22,7 @@ logs
 .env
 .env.*
 !.env.example
+
+serviceAccount.json
+cypress.env.json
+cypressFirebaseAdmin.json

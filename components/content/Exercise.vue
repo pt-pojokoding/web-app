@@ -1,102 +1,75 @@
 <script setup>
-import checkExercise from "~/services/achievement/exercise";
-import { renderMarkdown } from "~/services/content/renderMarkdown.ts";
+/**
+ * TODO: Exercise with other data type
+ * TODO: API Limitation
+ */
 const contentStore = useContentStore();
 const progressStore = useProgressStore();
 const exerciseStore = useExerciseStore();
 
-const content = contentStore.currentContent;
+await exerciseStore.checkIfUserEligibleToAccessExercise();
 
-const code = ref(content.startingCode);
-const renderedPrompt = renderMarkdown(content.prompt)
-const isLoading = ref(false);
-const testCases = content.testCases.map((test) => {
-    return {
-        ...test,
-        testDesc: renderMarkdown(test.testDesc),
-    };
+const handleKeydown = (event) => {
+    if (event.key === "Enter" && event.ctrlKey) {
+        exerciseStore.execute();
+    }
+};
+
+onMounted(() => {
+    window.addEventListener("keydown", handleKeydown);
 });
 
-const codeResult = ref(null)
-
-/**
- * store all stdin from test cases in an array
- * for every stdin run the code and return the result on an array
- * we got array of result from the compiler
- * the index of the result represent its test case
- * TODO: Exercise with other data type
- * TODO: API Limitation
- */
-async function handleExecuteCode() {
-    isLoading.value = true;
-    const stdinArray = testCases.map((test) => test.stdin);
-
-    const result = await exerciseStore.execCode({
-        stdinArray: stdinArray,
-        code: code.value,
-    });
-    
-    codeResult.value = result;
-
-    testCases.forEach((test, index) => {
-        if (result[index].stdout.trim() === test.expectedOutput) {
-            test.status = "success";
-            test.obtainedOutput = result[index].stdout;
-        } else {
-            test.status = "failed";
-            test.obtainedOutput = result[index].stdout;
-        }
-    });
-
-    isLoading.value = false;
-
-    await progressStore.saveProgress(code.value);
-    await checkExercise()
-}
+onBeforeUnmount(() => {
+    window.removeEventListener("keydown", handleKeydown);
+});
 </script>
 
 <template>
-    <div class="grid grid-cols-2 h-screen-minus-navbar">
-        <div class="p-8 flex flex-col gap-8 overflow-auto">
-            <h1 class="text-2xl font-bold">{{ content.displayTitle }}</h1>
-            <div class="flex flex-col gap-4">
-                <UCard v-for="(test, testIndex) in testCases" :key="testIndex" class="relative">
-                    <div v-if="isLoading" class="absolute right-2 top-2">
-                        <UiOrbitLoading></UiOrbitLoading>
+    <div class="grid grid-cols-2 h-screen-minus-navbar" data-cy="exercise">
+        <div class="overflow-auto relative" data-cy="exercise-left-panel">
+            <div class="p-8 min-h-full flex flex-col gap-4" data-cy="exercise-left-content">
+                <!-- $ Title -->
+                <h1 class="text-2xl font-bold text-primary font-space-mono" data-cy="exercise-title">
+                    {{ contentStore.currentContent.displayTitle }}
+                </h1>
+
+                <UDivider />
+
+                <!-- $ Question -->
+                <div data-cy="exercise-question">
+                    <h2 class="text-xl font-bold mb-2" data-cy="exercise-question-title">Soal</h2>
+                    <div v-html="contentStore.renderedPrompt" class="markdown-style exercise-style" data-cy="exercise-question-content"></div>
+                </div>
+
+                <!-- $ Test Cases -->
+                <div class="pb-16" data-cy="exercise-test-cases">
+                    <h2 class="text-xl font-bold mb-2" data-cy="exercise-test-cases-title">Test Cases</h2>
+                    <div class="flex flex-col gap-4" data-cy="exercise-test-cases-wrapper">
+                        <ContentExerciseTestCase />
                     </div>
-                    <div class="flex justify-between">
-                        <div>
-                            <UBadge v-if="test.status == 'success'" color="green" variant="outline">Berhasil</UBadge>
-                            <UBadge v-if="test.status == 'failed'" color="red" variant="outline">Gagal</UBadge>
-                        </div>
-                    </div>
-                    <div class="flex flex-col gap-4">
-                        <div>
-                            <h2 class="text-xl">{{ test.testTitle }}</h2>
-                            <div v-html="test.testDesc"></div>
-                        </div>
-                        <div>
-                            <h3 class="text-lg">Contoh pemanggilan fungsi</h3>
-                            <pre>{{ test.functionCallExample }}</pre>
-                        </div>
-                        <div>
-                            <h3 class="text-lg">Output yang diharapkan</h3>
-                            <pre>{{ test.expectedOutput }}</pre>
-                        </div>
-                        <div v-if="test.obtainedOutput">
-                            <h3 class="text-lg">Output yang didapatkan</h3>
-                            <pre>{{ test.obtainedOutput }}</pre>
-                        </div>
-                    </div>
-                </UCard>
+                </div>
             </div>
-            <div v-html="renderedPrompt"></div>
-            <pre>Content: {{ content }}</pre>
-            <pre>{{ codeResult }}</pre>
-            <UButton class="self-end" @click="handleExecuteCode">Cek Jawaban</UButton>
+
+            <!-- $ Sticky bottom div -->
+            <div
+                class="flex justify-between p-2 border-t-2 border-slate-600 sticky bottom-0 w-full bg-white dark:bg-bg"
+                data-cy="exercise-sticky-bottom"
+            >
+                <UButton variant="ghost" color="gray" @click="contentStore.resetCode()" data-cy="exercise-instruction-button">
+                    <UIcon name="i-heroicons-arrow-path"></UIcon>
+                </UButton>
+                <UButton
+                    class="self-end"
+                    size="xl"
+                    @click="exerciseStore.execute"
+                    :loading="exerciseStore.isCodeExecuting"
+                    data-cy="exercise-check-answer-button"
+                    >Cek Jawaban</UButton
+                >
+            </div>
         </div>
-        <div class="overflow-auto">
-            <ContentExerciseCodeEditor v-model="code" />
+        <div class="overflow-auto" data-cy="exercise-right-panel">
+            <ContentExerciseCodeEditor v-model="contentStore.code" />
         </div>
     </div>
 </template>

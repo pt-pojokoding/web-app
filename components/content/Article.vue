@@ -1,15 +1,13 @@
 <script setup>
 const contentStore = useContentStore();
-
-const content = contentStore.currentContent;
 </script>
 
 <template>
-    <div class="p-8">
-        <h1 class="text-3xl">{{ content.displayTitle }}</h1>
-        <div class="max-w-[570px]">
-            <ContentArticleMarkdownRenderer></ContentArticleMarkdownRenderer>
-            <ContentArticleQuiz></ContentArticleQuiz>
+    <div class="p-8" data-cy="article">
+        <h1 class="text-4xl font-bold font-space-mono text-primary" data-cy="article-title">{{ contentStore.currentContent.displayTitle }}</h1>
+        <div class="max-w-[570px]" data-cy="article-content-wrapper">
+            <ContentArticleMarkdownRenderer />
+            <ContentArticleQuiz v-if="contentStore.currentContent.quiz" class="my-8"></ContentArticleQuiz>
         </div>
     </div>
 </template>

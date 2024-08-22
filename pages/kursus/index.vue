@@ -1,5 +1,5 @@
 <script setup>
-// Katalog Kursus
+await navigateTo('/katalog-kursus')
 </script>
 
 <template>

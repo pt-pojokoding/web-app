@@ -14,7 +14,7 @@ export const runCode = async (compilableCode: string, compiledStdin: any[], lang
             stdin: compiledStdin,
             files: [
                 {
-                    name: "index.py",
+                    name: "index.js",
                     content: compilableCode,
                 },
             ],
@@ -25,6 +25,6 @@ export const runCode = async (compilableCode: string, compiledStdin: any[], lang
         const response = await axios.request(options);
         return response.data;
     } catch (error) {
-        console.error(error);
+        console.error("Error", error);
     }
 };
