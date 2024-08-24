@@ -1,4 +1,4 @@
-class ContentPage {
+export class ContentPage {
     getArticle() {
         return cy.get('[data-cy="article"]');
     }

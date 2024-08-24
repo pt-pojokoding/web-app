@@ -10,8 +10,8 @@ const courses = contentStore.courseCatalog;
 
 <template>
     <div v-for="course in courses" :key="course._id" :data-cy="'course-catalog-' + course._id">
-        <NuxtLink :to="`/kursus/${course.slug.current}`" data-cy="course-catalog-link">
-            <div class="border-2 border-gray-500 dark:bg-slate-800 bg-slate-100 rounded h-full" :data-cy="'course-catalog-' + course._id + '-container'">
+        <NuxtLink :to="`/kursus/${course.slug.current}`" :data-cy="'course-catalog-link-' + course._id">
+            <div class="border-2 dark:border-slate-600 border-slate-400 dark:bg-slate-800 bg-slate-100 rounded h-full" :data-cy="'course-catalog-' + course._id + '-container'">
                 <img
                     :src="course.mainImage"
                     alt="Course Cover"

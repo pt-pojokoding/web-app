@@ -21,6 +21,7 @@ const isDark = computed({
             variant="ghost"
             aria-label="Theme"
             @click="isDark = !isDark"
+            data-cy="color-mode-toggle"
         />
         <template #fallback>
             <div class="w-8 h-8" />

@@ -34,8 +34,6 @@ export const useAchievementStore = defineStore("achievement", () => {
     }
 
     async function checkAchievement(){
-        console.log("checking achievement")
-
         if(!achievementList.value){
             await fetchAllAchievements()
         }
@@ -45,19 +43,14 @@ export const useAchievementStore = defineStore("achievement", () => {
         }
 
         if(contentStore.currentContent?.contentType === "post"){
-            console.log("content type is post")
             // the count of currentUserProgress that has contentType post
             const quizProgressCount = progressStore.currentUserProgress.filter(
                 (progress: any) => progress.contentType === "post"
             ).length;
 
-            console.log("finished quiz count", quizProgressCount)
-
             const achievementCompleted = achievementList.value?.filter((achievement: any) => {
                 return achievement.minQuiz === quizProgressCount
             })
-
-            console.log("the achievement that has been completed", achievementCompleted)
             
             if(achievementCompleted!.length > 0){
                 const completedAchievementId = achievementCompleted![0].id
@@ -66,19 +59,14 @@ export const useAchievementStore = defineStore("achievement", () => {
         }
 
         if(contentStore.currentContent?.contentType === "exercise"){
-            console.log("content type is exercise")
             // the count of currentUserProgress that has contentType exercise
             const exerciseProgressCount = progressStore.currentUserProgress.filter(
                 (progress: any) => progress.contentType === "exercise"
             ).length;
 
-            console.log("finished exercise count", exerciseProgressCount)
-
             const achievementCompleted = achievementList.value?.filter((achievement: any) => {
                 return achievement.minExercise === exerciseProgressCount
             })
-
-            console.log("the achievement that has been completed", achievementCompleted)
         
             if(achievementCompleted){
                 const completedAchievementId = achievementCompleted![0].id
