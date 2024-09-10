@@ -2,9 +2,6 @@
 const authStore = useAuthStore();
 const isLoading = computed(() => authStore.isLoading);
 
-onMounted(async () => {
-    await fetchAchievement();
-});
 </script>
 
 <template>

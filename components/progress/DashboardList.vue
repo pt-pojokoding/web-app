@@ -25,7 +25,7 @@ const isDaftarKontenModalOpen = ref(false);
                         <div class="flex justify-between">
                             <h2 class="text-xl font-bold">{{ progress.title }}</h2>
                             <span class="text-primary text-2xl font-bold"
-                                >{{ progress.completionPercentage }}%</span
+                                >{{ Math.round(progress.completionPercentage) }}%</span
                             >
                         </div>
                         <UProgress :value="progress.completionPercentage"></UProgress>

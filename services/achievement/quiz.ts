@@ -1,6 +1,6 @@
 import { getDocs, query, where, collection, addDoc } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
-import { useMyAchievementStore, type AchievementState } from "~/stores/achievement";
+import { useAchievementStore } from "~/stores/achievement";
 
 const addQuizAchievement = async ({ completedQuizLength }: { completedQuizLength: number }) => {
     const toast = useToast();
@@ -101,43 +101,43 @@ const getAchivementById = async (achievementId: string) => {
     return querySnapshot.docs.map((doc) => doc.data())[0];
 };
 
-const fetchAllAchievements = async () => {
-    const { $db } = useNuxtApp();
-    const { setAchievement } = useMyAchievementStore();
-    const achievementQuery = query(collection($db, "achievementDetail"));
-    const querySnapshot = await getDocs(achievementQuery);
-    setAchievement(querySnapshot.docs.map((doc) => doc.data()) as AchievementState[]);
-};
+// const fetchAllAchievements = async () => {
+//     const { $db } = useNuxtApp();
+//     const { setAchievement } = useAchievementStore();
+//     const achievementQuery = query(collection($db, "achievementDetail"));
+//     const querySnapshot = await getDocs(achievementQuery);
+//     setAchievement(querySnapshot.docs.map((doc) => doc.data()) as AchievementState[]);
+// };
 
-const fetchAllUserAchievements = async () => {
-    const { $db } = useNuxtApp();
-    const { setUserAchievement } = useMyAchievementStore();
-    const { user } = useAuthStore();
-    const userAchievementQuery = query(
-        collection($db, "userAchievement"),
-        where("userId", "==", user.uid)
-    );
-    const querySnapshot = await getDocs(userAchievementQuery);
-    setUserAchievement(querySnapshot.docs.map((doc) => doc.data()) as AchievementState[]);
-};
+// const fetchAllUserAchievements = async () => {
+//     const { $db } = useNuxtApp();
+//     const { setUserAchievement } = useAchievementStore();
+//     const { user } = useAuthStore();
+//     const userAchievementQuery = query(
+//         collection($db, "userAchievement"),
+//         where("userId", "==", user.uid)
+//     );
+//     const querySnapshot = await getDocs(userAchievementQuery);
+//     setUserAchievement(querySnapshot.docs.map((doc) => doc.data()) as AchievementState[]);
+// };
 
-const fetchUserDoneQuizAndExerciseCount = async () => {
-    const { $db } = useNuxtApp();
-    const { userExerciseDoneCount, userQuizDoneCount } = storeToRefs(useMyAchievementStore());
-    const { user } = useAuthStore();
-    const userProgressQuery = query(collection($db, "progress"), where("userId", "==", user.uid));
-    const querySnapshot = await getDocs(userProgressQuery);
-    const userProgress = querySnapshot.docs.map((doc) => doc.data());
-    userQuizDoneCount.value = userProgress.filter((a) => a.contentType === "post").length
-    userExerciseDoneCount.value = userProgress.filter((a) => a.contentType === "exercise").length
-};
+// const fetchUserDoneQuizAndExerciseCount = async () => {
+//     const { $db } = useNuxtApp();
+//     const { userExerciseDoneCount, userQuizDoneCount } = storeToRefs(useAchievementStore());
+//     const { user } = useAuthStore();
+//     const userProgressQuery = query(collection($db, "progress"), where("userId", "==", user.uid));
+//     const querySnapshot = await getDocs(userProgressQuery);
+//     const userProgress = querySnapshot.docs.map((doc) => doc.data());
+//     userQuizDoneCount.value = userProgress.filter((a) => a.contentType === "post").length
+//     userExerciseDoneCount.value = userProgress.filter((a) => a.contentType === "exercise").length
+// };
 
-const fetchAchievement = async () => {
-    await fetchAllAchievements();
-    await fetchAllUserAchievements();
-    await fetchUserDoneQuizAndExerciseCount();
-};
+// const fetchAchievement = async () => {
+//     await fetchAllAchievements();
+//     await fetchAllUserAchievements();
+//     await fetchUserDoneQuizAndExerciseCount();
+// };
 
-export { getAllUserAchievements, getAchivementById, fetchAchievement };
+export { getAllUserAchievements, getAchivementById };
 
 export default checkQuiz;
