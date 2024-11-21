@@ -1,7 +1,6 @@
 <script setup>
 import { Codemirror } from "vue-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
-import { tokyoNight } from '@ddietr/codemirror-themes/tokyo-night'
 import { python } from "@codemirror/lang-python";
 import { ref, watch, defineProps, defineEmits } from "vue";
 
@@ -16,7 +15,7 @@ const emit = defineEmits(["update:modelValue"]);
 
 const code = ref(props.modelValue);
 
-const getExtensions = () => [python(), tokyoNight];
+const getExtensions = () => [javascript()];
 
 // Watch for changes in the code ref and emit updates
 watch(code, (newCode) => {

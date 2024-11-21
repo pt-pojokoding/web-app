@@ -8,19 +8,13 @@ const allFilesInsideFolder = (path: string) => {
 
 export default defineNuxtConfig({
     devtools: { enabled: false },
-    // app: {
-    //     head: {
-    //         script: [
-    //             {
-    //                 src: "//cdn.loop11.com/embed.js",
-    //                 type: "text/javascript",
-    //                 async: true,
-    //             },
-    //         ],
-    //     },
-    // },
-
     modules: ["@pinia/nuxt", "@nuxtjs/sanity", "@nuxt/ui"],
+
+    nitro: {
+        firebase: {
+            gen: 2,
+        },
+    },
 
     css: allFilesInsideFolder("assets/css/"),
 
@@ -40,4 +34,6 @@ export default defineNuxtConfig({
         dataset: "prod",
         useCdn: false,
     },
+
+    compatibilityDate: "2024-11-21",
 });

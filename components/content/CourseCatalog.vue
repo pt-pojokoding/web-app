@@ -6,12 +6,23 @@
 const contentStore = useContentStore();
 await contentStore.getCourses();
 const courses = contentStore.courseCatalog;
+
+const filteredCourses = computed(() => {
+    return courses.value.filter(
+        (course) =>
+            course.title.toLowerCase() !== "algoritma dan struktur data dengan python" &&
+            course.title.toLowerCase() !== "dasar pemrograman dengan python"
+    );
+});
 </script>
 
 <template>
-    <div v-for="course in courses" :key="course._id" :data-cy="'course-catalog-' + course._id">
+    <div v-for="course in filteredCourses" :key="course._id" :data-cy="'course-catalog-' + course._id">
         <NuxtLink :to="`/kursus/${course.slug.current}`" :data-cy="'course-catalog-link-' + course._id">
-            <div class="border-2 dark:border-slate-600 border-slate-400 dark:bg-slate-800 bg-slate-100 rounded h-full" :data-cy="'course-catalog-' + course._id + '-container'">
+            <div
+                class="border-2 dark:border-slate-600 border-slate-400 dark:bg-slate-800 bg-slate-100 rounded h-full"
+                :data-cy="'course-catalog-' + course._id + '-container'"
+            >
                 <img
                     :src="course.mainImage"
                     alt="Course Cover"
