@@ -5,11 +5,11 @@ const sidebarMenus = [
         path: "/dashboard",
         icon: "i-heroicons-home",
     },
-    {
-        name: "Pencapaian",
-        path: "/dashboard/pencapaian",
-        icon: "i-heroicons-star"
-    },
+    // {
+    //     name: "Pencapaian",
+    //     path: "/dashboard/pencapaian",
+    //     icon: "i-heroicons-star"
+    // },
     {
         name: "Info Akun",
         path: "/dashboard/info-akun",

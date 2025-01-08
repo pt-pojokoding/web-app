@@ -1,58 +1,71 @@
-import { getAllCourses } from "~/services/content/courses";
-import { getOneCourse } from "~/services/content/course";
-import { getContentData } from "~/services/content/content";
-import { getSidebarData } from "~/services/content/sidebar";
-import { renderMarkdown } from "~/services/content/renderMarkdown";
+import { useProgressStore } from './progress';
+import { useExerciseStore } from './exercise';
+import { getContentData } from '~/services/content/content';
+import { renderMarkdown } from '~/services/content/renderMarkdown';
+import { getAllCourses } from '~/services/content/courses';
+import { getOneCourse } from '~/services/content/course';
+import { getSidebarData } from '~/services/content/sidebar';
 
-export const useContentStore = defineStore("content", () => {
+export const useContentStore = defineStore('content', () => {
     const progressStore = useProgressStore();
     const exerciseStore = useExerciseStore();
 
     const courseCatalog = ref<any>([]);
     const currentContent = ref<any>(null);
     const sidebar = ref<any>([]);
-    const currentCourseSlug = ref<string>("");
+    const currentCourseSlug = ref<string>('');
 
-    const code = ref(currentContent.value?.startingCode);
-    const renderedPrompt = ref(renderMarkdown(currentContent.value?.prompt ?? ""));
-    const testCases = ref(currentContent.value?.testCases?.map((test: any) => {
-        return {
-            ...test,
-            testDesc: renderMarkdown(test.testDesc),
-            defaultOpen: false,
-        };
-    }) ?? []);
+    const code = ref('');
+    const renderedPrompt = ref(renderMarkdown(currentContent.value?.body.find((item: any) => item.type === "question")?.value ?? ""));
+
+    const testCases = ref([]);
 
     watch(currentContent, (newContent) => {
-        code.value = newContent?.startingCode ?? "";
-        renderedPrompt.value = renderMarkdown(newContent?.prompt ?? "");
-        testCases.value = newContent?.testCases?.map((test: any) => {
-            return {
+        // console.log("new Content", newContent?.body.find((item: any) => item.type === "test_cases")?.value)
+        if(newContent.content_type === "exercise"){
+            code.value = newContent?.body.find((item: any) => item.type === "starting_code").value ?? "";
+            renderedPrompt.value = renderMarkdown(newContent?.body.find((item: any) => item.type === "question")?.value ?? "");
+        }
+
+        const testCasesData = newContent?.body.find((item: any) => item.type === "test_cases")?.value;
+        if (testCasesData) {
+            testCases.value = testCasesData.map((test: any) => ({
                 ...test,
-                testDesc: renderMarkdown(test.testDesc),
+                test_description: renderMarkdown(test.test_description),
                 defaultOpen: false,
-            };
-        }) ?? [];
+            }));
+        } else {
+            testCases.value = [];
+        }
     });
 
     function isCurrentContentFinished() {
         if (!progressStore.currentUserProgress) return false;
-        return progressStore.currentUserProgress.some((progress: any) => progress.contentId === currentContent.value._id);
+        return progressStore.currentUserProgress.some((progress: any) => progress.contentId === currentContent.value?._id);
     }
 
     async function getCourses() {
         if (courseCatalog.value.length <= 0) {
-            courseCatalog.value = await getAllCourses();
+            try {
+                courseCatalog.value = await getAllCourses();
+            } catch (e) {
+                console.error(e);
+            }
         }
     }
 
     async function getCourse(slug: string) {
-        const course = await getOneCourse(slug);
-        return course;
+        const courseObject = await getOneCourse(slug);
+        if (!courseObject) {
+            console.error("Course not found.");
+            return null;
+        }
+
+        return courseObject;
     }
 
-    async function getContent(contentSlug: string, courseSlug: string) {
-        const content = await getContentData(contentSlug, courseSlug);
+    async function getContent(contentSlug: string) {
+        const content = await getContentData(contentSlug);
         currentContent.value = content;
     }
 
@@ -66,9 +79,12 @@ export const useContentStore = defineStore("content", () => {
 
     async function populateSidebarWithUserProgress() {
         if (progressStore.currentUserProgress) {
+            console.log("current user progress")
+            console.log("sidebar value", sidebar.value)
             for (const section of sidebar.value) {
+                console.log("section", section.contents)
                 for (const content of section.contents) {
-                    if (progressStore.currentUserProgress.some((progress: any) => progress.contentId === content._id)) {
+                    if (progressStore.currentUserProgress.some((progress: any) => progress.contentId === content.id)) {
                         content.isContentCompleted = true;
                     }
                 }
@@ -78,9 +94,9 @@ export const useContentStore = defineStore("content", () => {
 
     function resetCode() {
         if (currentContent.value) {
-            code.value = currentContent.value.startingCode;
+            code.value = currentContent.value.body.find((item: any) => item.type === "starting_code").value;
             console.log("reset code");
-            console.log("Starting code", currentContent.value.startingCode);
+            console.log("Starting code", currentContent.value.body.find((item: any) => item.type === "starting_code").value);
         } else {
             console.log("No current content to reset code from");
         }
@@ -93,6 +109,7 @@ export const useContentStore = defineStore("content", () => {
         code,
         renderedPrompt,
         testCases,
+        currentCourseSlug,
         isCurrentContentFinished,
         getCourses,
         getCourse,

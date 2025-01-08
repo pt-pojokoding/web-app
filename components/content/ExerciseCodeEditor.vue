@@ -2,7 +2,9 @@
 import { Codemirror } from "vue-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
 import { python } from "@codemirror/lang-python";
+import { oneDark } from '@codemirror/theme-one-dark'
 import { ref, watch, defineProps, defineEmits } from "vue";
+
 
 const props = defineProps({
     modelValue: {
@@ -15,13 +17,13 @@ const emit = defineEmits(["update:modelValue"]);
 
 const code = ref(props.modelValue);
 
-const getExtensions = () => [javascript()];
+const getExtensions = () => [javascript(), oneDark];
 
 // Watch for changes in the code ref and emit updates
 watch(code, (newCode) => {
     emit("update:modelValue", newCode);
 });
-
+    
 // Watch for changes in the modelValue prop and update the code ref
 watch(() => props.modelValue, (newValue) => {
     code.value = newValue;

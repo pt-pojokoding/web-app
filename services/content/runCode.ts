@@ -1,6 +1,9 @@
 import axios from "axios";
 
 export const runCode = async (compilableCode: string, compiledStdin: any[], languageName: string) => {
+    
+    // give list of stdin in array and will exec the code for every stdin string
+    // will result in array of object of results
     const options = {
         method: "POST",
         url: "https://onecompiler-apis.p.rapidapi.com/api/v1/run",

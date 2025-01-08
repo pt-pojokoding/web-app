@@ -8,6 +8,7 @@ export const useProgressStore = defineStore("progress", () => {
     const authStore = useAuthStore();
     const contentStore = useContentStore();
 
+    const isContinueLearningButtonLoading = ref(false)
     const currentUserProgress = ref<any>(null);
     const currentUserProgressDashboard = ref<any>(null);
     const currentContentProgress = ref<boolean>(null);
@@ -19,11 +20,11 @@ export const useProgressStore = defineStore("progress", () => {
     async function saveProgress(usersCode: string = "") {
         const progressData = {
             userId: authStore.user?.uid,
-            contentId: contentStore.currentContent?._id,
-            courseId: contentStore.currentContent?.course._id,
-            contentType: contentStore.currentContent?.contentType,
-            courseSlug: contentStore.currentContent?.course.slug.current,
-            contentSlug: contentStore.currentContent?.slug.current,
+            contentId: contentStore.currentContent?.id,
+            courseId: contentStore.currentContent?.course_id,
+            contentType: contentStore.currentContent?.content_type,
+            courseSlug: contentStore.currentCourseSlug,
+            contentSlug: contentStore.currentContent?.slug,
             usersCode,
         };
 
@@ -37,7 +38,7 @@ export const useProgressStore = defineStore("progress", () => {
         if(authStore.user){
             const progress = await getCurrentUserProgress(
                 authStore.user.uid,
-                courseId || contentStore.currentContent.course._id
+                courseId || contentStore.currentContent.course_id
             );
             currentUserProgress.value = progress;
         }
@@ -48,14 +49,16 @@ export const useProgressStore = defineStore("progress", () => {
     }
 
     async function continueLearning(courseId: string) {
+        isContinueLearningButtonLoading.value = true
         await fetchCurrentUserProgress(courseId);
-        console.log(currentUserProgress.value)
         const latestProgressContentSlug = currentUserProgress.value[currentUserProgress.value.length - 1].contentSlug;
-        const latestProgressCourseSlug = currentUserProgress.value[currentUserProgress.value.length - 1].courseSlug;
-        router.push(`/kursus/${latestProgressCourseSlug}/${latestProgressContentSlug}`);  
+        const latestProgressCourseSlug = currentUserProgress.value[currentUserProgress.value.length - 1].courseSlug;        
+        await router.push(`/kursus/${latestProgressCourseSlug}/${latestProgressContentSlug}`);  
+        isContinueLearningButtonLoading.value = false
     }
 
     return {
+        isContinueLearningButtonLoading,
         currentUserProgress,
         currentUserProgressDashboard,
         saveProgress,

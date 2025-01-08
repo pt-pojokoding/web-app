@@ -2,8 +2,9 @@
 import { renderMarkdown } from "~/services/content/renderMarkdown";
 
 const useContent = useContentStore();
-const markdown = useContent.currentContent.markdown;
-const renderedMarkdown = renderMarkdown(markdown);
+const markdown = useContent.currentContent.body.find(item => item.type === "text");
+
+const renderedMarkdown = renderMarkdown(markdown.value);
 </script>
 
 <template>

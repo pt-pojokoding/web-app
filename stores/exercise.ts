@@ -17,27 +17,31 @@ export const useExerciseStore = defineStore("exercise", () => {
 
         const stdinArray = contentStore.testCases.map((test: any) => test.stdin);
 
+        console.log("stdin Array", stdinArray)
+        
         const result = await execCode({
             stdinArray: stdinArray,
             code: contentStore.code,
         });
 
+        console.log("code execution result", result)
+
         codeResult.value = result;
 
-        contentStore.testCases.forEach((test: any, index: any) => {
+        contentStore.testCases.forEach((test: any, index: number) => {
             if (result[index].stdout) {
-                if ((result[index].stdout?.trim() ?? "") === test.expectedOutput) {
+                if ((result[index].stdout?.trim() ?? "") === test.expected_output) {
                     test.status = "success";
-                    test.obtainedOutput = result[index].stdout;
+                    test.obtained_output = result[index].stdout;
                 } else {
                     test.status = "failed";
-                    test.obtainedOutput = result[index].stdout;
+                    test.obtained_output = result[index].stdout;
                 }
             }
 
             if (result[index].stderr) {
                 test.status = "failed";
-                test.obtainedOutput = result[index].stderr;
+                test.obtained_output = result[index].stderr;
             }
 
             if (
@@ -47,9 +51,11 @@ export const useExerciseStore = defineStore("exercise", () => {
                 !result[index].exeption
             ) {
                 test.status = "failed";
-                test.obtainedOutput = "Kode tidak menghasilkan output";
+                test.obtained_output = "Kode tidak menghasilkan output";
             }
         });
+
+        console.log("test cases", contentStore.testCases)
 
         isCodeExecuting.value = false;
 
@@ -65,10 +71,12 @@ export const useExerciseStore = defineStore("exercise", () => {
     }
 
     async function execCode(params: { stdinArray: any[]; code: string }) {
-        const readyToCompileCode = params.code + "\n\n" + (contentStore.currentContent.compileCode ?? "");
+        const compileCode = contentStore.currentContent.body.find((item: any) => item.type === "compile_code").value
+        const readyToCompileCode = params.code + "\n\n" + (compileCode ?? "");
         console.log(readyToCompileCode);
+        console.log("stdinArray", params.stdinArray)
 
-        const response = await runCode(readyToCompileCode, params.stdinArray, contentStore.currentContent.languageConfig.languageName);
+        const response = await runCode(readyToCompileCode, params.stdinArray, "javascript");
 
         console.log(response);
         return response;

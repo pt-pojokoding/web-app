@@ -26,7 +26,7 @@ function startQuiz() {
 
 function checkAnswer() {
     showExplanation.value = true;
-    selectedChoiceExplanation.value = quiz[currentQuestionIndex.value].choices[selectedChoiceIndex.value].explanation;
+    selectedChoiceExplanation.value = quiz.questions[currentQuestionIndex.value].choices[selectedChoiceIndex.value].explanation;
 
     if (isSelectedAnswerCorrect.value) {
         userAnswerIsCorrect.value = true;
@@ -42,7 +42,7 @@ async function nextQuestion() {
     isSelectedAnswerCorrect.value = null;
     showExplanation.value = false;
     userAnswerIsCorrect.value = false;
-    if (currentQuestionIndex.value === quiz.length) {
+    if (currentQuestionIndex.value === quiz.questions.length) {
         await progressStore.saveProgress();
         contentStore.populateSidebarWithUserProgress();
         await achievementStore.checkAchievement();
@@ -54,27 +54,27 @@ async function nextQuestion() {
     <UCard data-cy="quiz">
         <div v-if="authStore.user">
             <!-- $ Quiz sudah dikerjakan sebelumnya -->
-            <div v-if="progressStore.getCurrentContentProgress(contentStore.currentContent._id)" data-cy="quiz-completed">
+            <div v-if="progressStore.getCurrentContentProgress(contentStore.currentContent.id)" data-cy="quiz-completed">
                 <h2 class="text-3xl" data-cy="quiz-completed-title">Quiz Selesai</h2>
                 <p class="text-lg" data-cy="quiz-completed-description">Anda sudah menyelesaikan quiz ini</p>
             </div>
 
             <!-- $ Quiz belum pernah dikerjakan sebelumnya dan belum klik "mulai quiz" -->
             <div
-                v-if="!progressStore.getCurrentContentProgress(contentStore.currentContent._id) && !quizStarted"
+                v-if="!progressStore.getCurrentContentProgress(contentStore.currentContent.id) && !quizStarted"
                 class="flex flex-col gap-4"
                 data-cy="quiz-intro"
             >
                 <h2 class="text-3xl" data-cy="quiz-intro-title">Quiz</h2>
                 <p class="text-lg" data-cy="quiz-intro-question-count">
-                    Jumlah pertanyaan <span data-cy="quiz-intro-question-count-number">{{ quiz.length }}</span>
+                    Jumlah pertanyaan <span data-cy="quiz-intro-question-count-number">{{ quiz.questions.length }}</span>
                 </p>
                 <UButton class="self-start" @click="startQuiz" data-cy="quiz-intro-start-button">Mulai Quiz</UButton>
             </div>
 
             <!-- $ Quiz Start -->
             <div v-if="quizStarted" data-cy="quiz-started">
-                <div v-for="(question, questionIndex) in quiz" :key="questionIndex" :data-cy="'quiz-question-' + questionIndex">
+                <div v-for="(question, questionIndex) in quiz.questions" :key="questionIndex" :data-cy="'quiz-question-' + questionIndex">
                     <div v-if="questionIndex === currentQuestionIndex" data-cy="quiz-current-question">
                         <h3 data-cy="quiz-current-question-title">{{ question.question }}</h3>
                         <ul class="flex flex-col gap-3" data-cy="quiz-current-question-choices">
@@ -117,7 +117,7 @@ async function nextQuestion() {
                                 >Cek Jawaban</UButton
                             >
                             <UButton v-if="userAnswerIsCorrect" @click="nextQuestion" class="self-end" data-cy="quiz-next-question-button">
-                                <p v-if="currentQuestionIndex === quiz.length - 1">Selesai</p>
+                                <p v-if="currentQuestionIndex === quiz.questions.length - 1">Selesai</p>
                                 <p v-else>Pertanyaan Selanjutnya</p>
                             </UButton>
                         </ul>
@@ -126,7 +126,7 @@ async function nextQuestion() {
             </div>
 
             <!-- $ Quiz Selesai -->
-            <div v-if="currentQuestionIndex === quiz.length" data-cy="quiz-final-completion">
+            <div v-if="currentQuestionIndex === quiz.questions.length" data-cy="quiz-final-completion">
                 <h2 data-cy="quiz-final-completion-title">Quiz Selesai</h2>
                 <p data-cy="quiz-final-completion-description">Anda sudah menyelesaikan quiz ini</p>
             </div>

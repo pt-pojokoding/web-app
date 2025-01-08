@@ -1,8 +1,6 @@
 <script setup>
-// TODO: Design Revamp
-// TODO: Tombol lanjut belajar di progress
 const authStore = useAuthStore();
-// TODO: Test this
+
 authStore.checkUser({ redirectTo: '/login' });
 
 useSeoMeta({

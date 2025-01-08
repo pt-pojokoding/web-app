@@ -5,10 +5,10 @@ const isLoading = computed(() => authStore.isLoading);
 
 <template>
     <div>
-        <UiLoadingScreen v-if="isLoading" />
-        <NuxtLayout v-else>
+        <NuxtLayout>      
+            <UiLoadingScreen v-if="isLoading" />
+            <NuxtPage v-else></NuxtPage>
             <NuxtLoadingIndicator />
-            <NuxtPage></NuxtPage>
         </NuxtLayout>
         <UNotifications />
     </div>
